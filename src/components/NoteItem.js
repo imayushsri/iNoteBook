@@ -7,7 +7,8 @@ const NoteItem = (props) => {
     const {note} = props;
     const {deleteNote} = context;
   return (
-    <div className="card col-md-3 m-3">
+    <div className="col-md-3">
+    <div className="card m-3">
   <div className="card-body">
     <div className="head">
     <h5 className="card-title">{note.title}</h5>
@@ -19,8 +20,9 @@ const NoteItem = (props) => {
     </div>
     </div>
     <p className="card-text">{note.description}</p>
-    <span class="badge text-bg-dark">{note.tag}</span>
+    <span className="badge text-bg-dark">{note.tag}</span>
   </div>
+</div>
 </div>
   )
 }
