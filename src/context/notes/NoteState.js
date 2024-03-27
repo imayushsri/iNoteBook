@@ -37,6 +37,8 @@ const NoteState = (props) => {
       },
       body: JSON.stringify({title, description, tag})
     });
+    const json = await response.json();
+    console.log(json);
 
     //Logic to add note
     console.log('Adding')
@@ -62,7 +64,7 @@ const NoteState = (props) => {
         "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjVmYTkzODljZTQzM2ZjZGI5MTkyNmY3In0sImlhdCI6MTcxMTE4NTk1Nn0.VYZyhcam_bTS9XgZba2Ebw9HTRbM2K0oLAWFdJxrO-o"
       },
     });
-    const json = response.json();
+    const json = await response.json();
     console.log(json);
 
   // Logic to delete Note
@@ -77,24 +79,29 @@ const NoteState = (props) => {
   const editNote = async (id, title, description, tag) => {
     // API Call
     const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjVmYTkzODljZTQzM2ZjZGI5MTkyNmY3In0sImlhdCI6MTcxMTE4NTk1Nn0.VYZyhcam_bTS9XgZba2Ebw9HTRbM2K0oLAWFdJxrO-o"
       },
       body: JSON.stringify({title, description, tag})
     });
+    const json = await response.json();
+    console.log(json);
     // const json = response.json();
 
     // Logic to edit note
-    for (let index = 0; index < notes.length; index++) {
-      const element = notes[index];
+    let newNotes = JSON.parse(JSON.stringify(notes));
+    for (let index = 0; index < newNotes.length; index++) {
+      const element = newNotes[index];
       if (element._id === id) {
-        element.title = title;
-        element.description = description;
-        element.tag = tag;
+        newNotes[index].title = title;
+        newNotes[index].description = description;
+        newNotes[index].tag = tag;
+        break;
       }
     }
+    setNotes(newNotes);
   }
 
   return (
