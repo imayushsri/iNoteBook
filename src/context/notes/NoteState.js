@@ -42,15 +42,7 @@ const NoteState = (props) => {
 
     //Logic to add note
     console.log('Adding')
-    const note = {
-      "_id": "65feb250066e0bc1b75fdbd4",
-      "user": "65fa9389ce433fcdb91926f7",
-      "title": title,
-      "description": description,
-      "tag": tag,
-      "date": "2024-03-23T10:43:28.210Z",
-      "__v": 0
-    };
+    const note = json
     setNotes(notes.concat(note))
   }
 
