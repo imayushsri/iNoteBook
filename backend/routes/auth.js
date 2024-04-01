@@ -66,6 +66,7 @@ router.post("/login", [
     body("email", "Enter a valid Email").isEmail(),
     body("password", "Password can not be blanked").exists()
   ], async (req, res) => {
+    let success = false;
      // If there are errors return Bad request and the error
      const errors = validationResult(req);
      if (!errors.isEmpty()) {
@@ -89,7 +90,8 @@ router.post("/login", [
         }
       }
       const authTocken = jwt.sign(Data, JWT_SECRET);
-      res.json({authTocken})
+      success = true;
+      res.json({success, authTocken});
 
     } catch (error) {
       console.error(error.message);
