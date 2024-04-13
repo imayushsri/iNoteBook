@@ -17,7 +17,8 @@ const NoteItem = (props) => {
       updateNote(note);
     }}></i>
     <i className="fa-regular fa-trash-can ms-2" onClick={()=>{
-      deleteNote(note._id)
+      deleteNote(note._id);
+      props.showAlert("Note Deleted Successfully", "danger");
     }}></i>
     </div>
     </div>

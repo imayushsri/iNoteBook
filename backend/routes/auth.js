@@ -19,6 +19,7 @@ router.post(
     }),
   ],
   async (req, res) => {
+    let success = false;
     // If there are errors return Bad request and the error
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -29,7 +30,7 @@ router.post(
       // Check whether the user with this email exist already
       let user = await User.findOne({ email: req.body.email });
       if (user) {
-        return res.status(400).json({ error: "Email already used" });
+        return res.status(400).json({success, error: "Email already used" });
       }
       const salt = await bcrypt.genSalt(10);
       secPass = await bcrypt.hash(req.body.password, salt) ;
@@ -52,7 +53,8 @@ router.post(
       const authTocken = jwt.sign(Data, JWT_SECRET);
       // console.log(authTocken);
       // res.json(user);
-      res.json({authTocken});
+      success = true;
+      res.json({success, authTocken});
     } catch (error) {
       // catch error
       console.error(error.message);
@@ -89,9 +91,9 @@ router.post("/login", [
           id : user.id
         }
       }
-      const authTocken = jwt.sign(Data, JWT_SECRET);
+      const authToken = jwt.sign(Data, JWT_SECRET);
       success = true;
-      res.json({success, authTocken});
+      res.json({success, authToken});
 
     } catch (error) {
       console.error(error.message);

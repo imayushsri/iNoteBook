@@ -1,11 +1,39 @@
-import React from 'react';
-import {Link, useLocation} from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {Link, useLocation, useNavigate} from 'react-router-dom';
 
 const Navbar = () => {
+  const [name, setName] = useState("");
+  const getUserDetails = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/getuser", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem('token')
+        },
+      });
+      const json = await response.json();
+      setName(json.name);
+    } catch (error) {
+      console.error('Error fetching user details:', error);
+    }
+  }
+  // console.log(UserDets);
+  let history = useNavigate();
+  const handleLogout = () =>{
+    localStorage.removeItem('token');
+    history("/login");
+  }
   let location = useLocation();
   // useEffect(() => {
   //   console.log(location.pathname);
   // }, [location]);
+
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      getUserDetails();
+    }
+  }, []);
   return (
     <nav className="navbar bg-dark navbar-expand-lg bg-body-tertiary" data-bs-theme = 'dark'>
   <div className="container-fluid">
@@ -22,8 +50,10 @@ const Navbar = () => {
           <Link className={`nav-link ${location.pathname === '/about' ? 'active' : ''}`} to="/about">About</Link>
         </li>
       </ul>
+      {!localStorage.getItem('token') ? <form className='d-flex'>
         <Link className="btn btn-outline-primary mx-2" to='/login' role="button">Login</Link>
         <Link className="btn btn-outline-primary mx-2" to='/signup' role="button">Sign Up</Link>
+        </form> :<><div className='me-4 text-light'><i className="fa-regular fa-user text-light"></i><b className='ms-2'>{name}</b></div> <button onClick={handleLogout} className='btn btn-outline-primary'>Log Out</button></>}
     </div>
   </div>
 </nav>

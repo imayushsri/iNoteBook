@@ -1,16 +1,15 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const Login = (props) => {
     let history = useNavigate();
-    const [credential, setcredential] = useState({email: "", password : ""});
+    const [credential, setcredential] = useState({email: "", password: ""});
    const handleLogin = async (e) =>{
        e.preventDefault();
        const response = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjVmYTkzODljZTQzM2ZjZGI5MTkyNmY3In0sImlhdCI6MTcxMTE4NTk1Nn0.VYZyhcam_bTS9XgZba2Ebw9HTRbM2K0oLAWFdJxrO-o"
         },
         body: JSON.stringify({email : credential.email, password : credential.password})
       });
@@ -18,11 +17,13 @@ const Login = () => {
       console.log(json);
       if(json.success){
         //save the token and Redirect
-        localStorage.setItem('token', json.authtoken);
+        localStorage.setItem('token', json.authToken);
+        props.showAlert("Logged In", "success");
         history("/");
       }
       else{
-        alert("Invalid Credentials");
+        props.showAlert("Invalid Credentials", "danger")
+        history("/login");
       }
     }
 
@@ -30,8 +31,9 @@ const Login = () => {
         setcredential({ ...credential, [event.target.name]: event.target.value })
     }
     return (
-        <form onSubmit={handleLogin}>
-            <div className="mb-3">
+        <form className='container' onSubmit={handleLogin}>
+            <div className="my-3">
+              <h3 className='mb-3'>Login to continue to iNoteBook</h3>
                 <label htmlFor="email" className="form-label">Email address</label>
                 <input type="email" value={credential.email} onChange={onChange} className="form-control" id="email" name="email" aria-describedby="emailHelp" />
                 <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>

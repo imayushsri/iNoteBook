@@ -2,9 +2,11 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import noteContext from '../context/notes/noteContext';
 import NoteItem from './NoteItem';
 import AddNote from './AddNote';
+import { useNavigate } from 'react-router-dom';
 
 
-const Notes = () => {
+const Notes = (props) => {
+  const navigate = useNavigate()
 
     const [note, setNote] = useState({id:"", etitle: '', edescription: '', etag: 'default' })
 
@@ -14,14 +16,20 @@ const Notes = () => {
     const handleEditNote = (event) => {
       editNote(note.id, note.etitle, note.edescription, note.etag)
         refClose.current.click();
+        props.showAlert("Note Updated Successfully", "success");
     }
 
   const context = useContext(noteContext);
   const { notes, getNotes, editNote } = context;
   useEffect(() => {
-    getNotes();
+    if(localStorage.getItem('token')){
+      getNotes();
+    }
+    else{
+      navigate('/login');
+    }
     // eslint-disable-next-line
-  }, [])
+  },[])
 
   const updateNote = (currentNote) => {
      ref.current.click();
@@ -65,14 +73,15 @@ const Notes = () => {
     </div>
   </div>
 </div>
-      <AddNote />
+      <AddNote showAlert={props.showAlert}/>
       <div className="row my-3">
         <h3>Your Notes</h3>
         <div className="container">
-        {notes.length === 0 && " No notes to Display"}
+          {notes.length === 0 && "No notes to display"} {/* Update this line */}
         </div>
+        {/* Add a conditional rendering to map over notes only when it's not empty */}
         {notes.map((note) => {
-          return <NoteItem note={note} updateNote={updateNote} key={note._id} />
+          return <NoteItem showAlert={props.showAlert} note={note} updateNote={updateNote} key={note._id} />
         })}
       </div>
     </>
