@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import noteContext from '../context/notes/noteContext';
 import NoteItem from './NoteItem';
-import AddNote from './AddNote';
+// import AddNote from './AddNote';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -73,7 +73,7 @@ const Notes = (props) => {
     </div>
   </div>
 </div>
-      <AddNote showAlert={props.showAlert}/>
+      <div className="container">
       <div className="row my-3">
         <h3>Your Notes</h3>
         <div className="container">
@@ -83,6 +83,7 @@ const Notes = (props) => {
         {notes.map((note) => {
           return <NoteItem showAlert={props.showAlert} note={note} updateNote={updateNote} key={note._id} />
         })}
+      </div>
       </div>
     </>
   )

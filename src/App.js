@@ -8,6 +8,8 @@ import Alert from './components/Alert';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
 import { useState } from 'react';
+// import AddNote from './components/AddNote';
+import Notes from './components/Notes';
 function App() {
   const [alert, setAlert] = useState(null);
   const showAlert = (message,typo) =>{
@@ -31,6 +33,7 @@ function App() {
           <Route path='/about' exact element={<About/>}></Route>
           <Route path='/login' exact element={<Login showAlert={showAlert}/>}></Route>
           <Route path='/signup' exact element={<SignUp showAlert={showAlert}/>}></Route>
+          <Route path='/notes' exact element={<Notes showAlert={showAlert}/>}/>
         </Routes>
     </div>
     </Router>
